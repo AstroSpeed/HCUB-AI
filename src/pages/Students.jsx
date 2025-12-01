@@ -115,6 +115,27 @@ const StudentCard = ({ student }) => (
         <div className="flex items-center gap-2 text-sm text-muted-foreground bg-accent/50 p-2 rounded-lg">
           <GraduationCap size={16} className="text-primary" />
           <span className="truncate">{student.course}</span>
+        </div>
+        <div className="flex items-center gap-2 text-sm text-muted-foreground bg-accent/50 p-2 rounded-lg">
+          <Mail size={16} className="text-primary" />
+          <span className="truncate">{student.email}</span>
+        </div>
+      </div>
+
+      <div className="mt-4 w-full grid grid-cols-2 gap-2">
+        <button className="py-2 bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground rounded-lg text-sm font-medium transition-colors">
+          Profile
+        </button>
+        <button className="py-2 bg-destructive/10 text-destructive hover:bg-destructive hover:text-destructive-foreground rounded-lg text-sm font-medium transition-colors">
+          Remove
+        </button>
+      </div>
+    </div>
+  </motion.div>
+);
+
+const AddStudentModal = ({ isOpen, onClose }) => {
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
@@ -218,6 +239,34 @@ const StudentCard = ({ student }) => (
 const Students = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
+  return (
+    <div className="space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Students</h1>
+          <p className="text-muted-foreground mt-1">
+            Manage student records and enrollments.
+          </p>
+        </div>
+        <div className="flex gap-2">
+          <button className="flex items-center gap-2 px-4 py-2 border border-border bg-card hover:bg-accent rounded-lg transition-colors font-medium">
+            <GraduationCap size={18} />
+            Enroll Student
+          </button>
+          <button
+            onClick={() => setIsAddModalOpen(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors shadow-sm font-medium"
+          >
+            <Plus size={18} />
+            Add Student
+          </button>
+        </div>
+      </div>
+
+      <div className="flex flex-col sm:flex-row gap-4 items-center bg-card p-4 rounded-xl border border-border shadow-sm">
+        <div className="relative w-full sm:flex-1">
+          <Search
+            size={18}
             className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
           />
           <input
