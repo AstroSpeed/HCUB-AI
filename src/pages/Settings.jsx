@@ -11,6 +11,7 @@ import {
   Save,
 } from "lucide-react";
 import clsx from "clsx";
+import { useTheme } from "../context/ThemeContext";
 
 const SettingsSection = ({ title, description, children }) => (
   <div className="bg-card border border-border rounded-xl p-6 shadow-sm">
@@ -49,7 +50,7 @@ const Settings = () => {
   const [activeTab, setActiveTab] = useState("general");
   const [emailNotifs, setEmailNotifs] = useState(true);
   const [smsNotifs, setSmsNotifs] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
+  const { darkMode, toggleDarkMode } = useTheme();
   const [autoLock, setAutoLock] = useState(true);
 
   const tabs = [
@@ -165,7 +166,7 @@ const Settings = () => {
                   label="Dark Mode"
                   description="Use a dark color theme for low-light environments."
                   checked={darkMode}
-                  onChange={setDarkMode}
+                  onChange={toggleDarkMode}
                 />
               </SettingsSection>
             </motion.div>
