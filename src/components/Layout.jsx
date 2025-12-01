@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Outlet, Link, useLocation } from "react-router-dom";
 import {
   LayoutDashboard,
+  BookOpen,
   Users,
   CalendarCheck,
   BarChart3,
@@ -53,6 +54,7 @@ const Layout = () => {
 
   const navItems = [
     { icon: LayoutDashboard, label: "Dashboard", path: "/" },
+    { icon: BookOpen, label: "Courses", path: "/courses" },
     { icon: Users, label: "Students", path: "/students" },
     { icon: CalendarCheck, label: "Attendance", path: "/attendance" },
     { icon: BarChart3, label: "Reports", path: "/reports" },

@@ -1,19 +1,3 @@
-import React, { useState } from "react";
-import { motion } from "framer-motion";
-import {
-  Search,
-  Filter,
-  MoreVertical,
-  Camera,
-  CheckCircle,
-  XCircle,
-  Clock,
-} from "lucide-react";
-import clsx from "clsx";
-
-const studentsData = [
-  {
-    id: 1,
     name: "Alex Johnson",
     idNumber: "CS2023001",
     status: "Present",
@@ -106,28 +90,6 @@ const Attendance = () => {
             className={clsx(
               "px-4 py-2 rounded-md text-sm font-medium transition-all",
               activeTab === "live"
-                ? "bg-background shadow-sm text-foreground"
-                : "text-muted-foreground hover:text-foreground"
-            )}
-          >
-            Live Monitor
-          </button>
-          <button
-            onClick={() => setActiveTab("logs")}
-            className={clsx(
-              "px-4 py-2 rounded-md text-sm font-medium transition-all",
-              activeTab === "logs"
-                ? "bg-background shadow-sm text-foreground"
-                : "text-muted-foreground hover:text-foreground"
-            )}
-          >
-            Attendance Logs
-          </button>
-        </div>
-      </div>
-
-      {activeTab === "live" && (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Live Camera Feed Mock */}
           <div className="lg:col-span-2 space-y-6">
             <div className="bg-black rounded-xl overflow-hidden aspect-video relative group shadow-lg border border-border">
