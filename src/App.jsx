@@ -4,6 +4,8 @@ import Layout from "./components/Layout";
 import Dashboard from "./pages/Dashboard";
 import Attendance from "./pages/Attendance";
 import Reports from "./pages/Reports";
+import Students from "./pages/Students";
+import Settings from "./pages/Settings";
 
 function App() {
   return (
@@ -11,16 +13,10 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Dashboard />} />
-          <Route
-            path="students"
-            element={<div className="p-4">Students Page (Coming Soon)</div>}
-          />
+          <Route path="students" element={<Students />} />
           <Route path="attendance" element={<Attendance />} />
           <Route path="reports" element={<Reports />} />
-          <Route
-            path="settings"
-            element={<div className="p-4">Settings Page (Coming Soon)</div>}
-          />
+          <Route path="settings" element={<Settings />} />
         </Route>
       </Routes>
     </BrowserRouter>
