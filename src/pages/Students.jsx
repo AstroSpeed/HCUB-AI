@@ -11,8 +11,12 @@ import {
   GraduationCap,
   X,
   Upload,
+  Camera,
+  Check,
 } from "lucide-react";
 import clsx from "clsx";
+import FaceEnrollment from "../components/FaceEnrollment";
+import { useFaceRecognition } from "../hooks/useFaceRecognition";
 
 const studentsData = [
   {
