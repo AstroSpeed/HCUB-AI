@@ -3,8 +3,16 @@
  */
 
 import React, { createContext, useState, useEffect, useCallback } from "react";
-import { initializeStorage } from "../utils/storage";
+import {
+  initializeStorage,
+  clearAllData,
+  STORAGE_KEYS,
+} from "../utils/storage";
 import { generateMockData } from "../utils/mockData";
+import {
+  isDataInitPending,
+  markDataInitialized,
+} from "../services/authService";
 
 export const DataContext = createContext(null);
 
@@ -22,15 +30,28 @@ export const DataProvider = ({ children }) => {
       try {
         setIsLoading(true);
 
-        // Initialize storage with mock data if empty
-        initializeStorage(generateMockData);
+        // Check if this is first login after signup
+        if (isDataInitPending()) {
+          console.log(
+            "[DataContext] First login detected - clearing all dummy data"
+          );
+          clearAllData();
+          markDataInitialized();
 
-        // Load from storage
-        const mockData = generateMockData();
-        setStudents(mockData.students);
-        setCourses(mockData.courses);
-        setSessions(mockData.sessions);
-        setAttendance(mockData.attendance);
+          // Start with empty data
+          setStudents([]);
+          setCourses([]);
+          setSessions([]);
+          setAttendance([]);
+        } else {
+          // Load existing data (could be empty or have real user data)
+          initializeStorage(generateMockData);
+          const mockData = generateMockData();
+          setStudents(mockData.students);
+          setCourses(mockData.courses);
+          setSessions(mockData.sessions);
+          setAttendance(mockData.attendance);
+        }
 
         setIsLoading(false);
       } catch (err) {
