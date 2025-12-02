@@ -160,7 +160,7 @@ const AddStudentModal = ({ isOpen, onClose }) => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}
-        className="bg-card/95 backdrop-blur-xl w-full max-w-2xl rounded-xl shadow-2xl border border-border/50 overflow-hidden"
+        className="bg-card w-full max-w-2xl rounded-xl shadow-2xl border border-border overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between p-6 border-b border-border">
