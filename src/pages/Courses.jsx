@@ -13,6 +13,7 @@ import {
   X,
 } from "lucide-react";
 import clsx from "clsx";
+import { useToast } from "../context/ToastContext";
 
 const initialCourses = [
   {
@@ -275,6 +276,7 @@ const Courses = () => {
   const [courses, setCourses] = useState(initialCourses);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCourse, setEditingCourse] = useState(null);
+  const { addToast } = useToast();
 
   const handleEdit = (course) => {
     setEditingCourse(course);
@@ -282,17 +284,39 @@ const Courses = () => {
   };
 
   const handleDelete = (id) => {
-    if (confirm("Are you sure you want to delete this course?")) {
-      setCourses(courses.filter((c) => c.id !== id));
-    }
+    const deletedCourse = courses.find((c) => c.id === id);
+    const previousCourses = [...courses];
+
+    setCourses(courses.filter((c) => c.id !== id));
+
+    addToast({
+      type: "success",
+      message: `"${deletedCourse.name}" deleted`,
+      description: "Course has been removed",
+      onUndo: () => {
+        setCourses(previousCourses);
+      },
+    });
   };
 
   const handleMarkComplete = (id) => {
+    const course = courses.find((c) => c.id === id);
+    const previousCourses = [...courses];
+
     setCourses(
       courses.map((c) =>
         c.id === id ? { ...c, status: "Completed", progress: 100 } : c
       )
     );
+
+    addToast({
+      type: "success",
+      message: `"${course.name}" marked as complete`,
+      description: "Course progress set to 100%",
+      onUndo: () => {
+        setCourses(previousCourses);
+      },
+    });
   };
 
   const handleSave = () => {
