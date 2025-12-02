@@ -2,7 +2,7 @@
  * @fileoverview Face database storage and management
  */
 
-import { STORAGE_KEYS } from "./storage";
+import { STORAGE_KEYS } from "../utils/storage";
 
 const FACE_DB_KEY = `${STORAGE_KEYS.SETTINGS}_face_database`;
 
