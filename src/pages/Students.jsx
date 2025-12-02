@@ -123,10 +123,16 @@ const StudentCard = ({ student }) => (
       </div>
 
       <div className="mt-4 w-full grid grid-cols-2 gap-2">
-        <button className="py-2 bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground rounded-lg text-sm font-medium transition-colors">
+        <button
+          className="py-2 bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground rounded-lg text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          aria-label={`View ${student.name}'s profile`}
+        >
           Profile
         </button>
-        <button className="py-2 bg-destructive/10 text-destructive hover:bg-destructive hover:text-destructive-foreground rounded-lg text-sm font-medium transition-colors">
+        <button
+          className="py-2 bg-destructive/10 text-destructive hover:bg-destructive hover:text-destructive-foreground rounded-lg text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-destructive"
+          aria-label={`Remove ${student.name} from course`}
+        >
           Remove
         </button>
       </div>
@@ -137,19 +143,34 @@ const StudentCard = ({ student }) => (
 const AddStudentModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
+  const handleEscape = (e) => {
+    if (e.key === "Escape") onClose();
+  };
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+      onClick={onClose}
+      onKeyDown={handleEscape}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="add-student-modal-title"
+    >
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}
-        className="bg-card w-full max-w-2xl rounded-xl shadow-xl border border-border overflow-hidden"
+        className="bg-card/95 backdrop-blur-xl w-full max-w-2xl rounded-xl shadow-2xl border border-border/50 overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between p-6 border-b border-border">
-          <h2 className="text-xl font-bold">Add New Student</h2>
+          <h2 id="add-student-modal-title" className="text-xl font-bold">
+            Add New Student
+          </h2>
           <button
             onClick={onClose}
-            className="text-muted-foreground hover:text-foreground"
+            className="text-muted-foreground hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-full p-1"
+            aria-label="Close modal"
           >
             <X size={20} />
           </button>
@@ -168,24 +189,38 @@ const AddStudentModal = ({ isOpen, onClose }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium">Full Name</label>
+              <label htmlFor="student-name" className="text-sm font-medium">
+                Full Name
+              </label>
               <input
+                id="student-name"
                 type="text"
                 placeholder="e.g. John Doe"
                 className="w-full px-3 py-2 rounded-lg border border-border bg-background focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                aria-required="true"
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium">Student ID</label>
+              <label htmlFor="student-id" className="text-sm font-medium">
+                Student ID
+              </label>
               <input
+                id="student-id"
                 type="text"
                 placeholder="e.g. CS2024001"
                 className="w-full px-3 py-2 rounded-lg border border-border bg-background focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                aria-required="true"
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium">Course</label>
-              <select className="w-full px-3 py-2 rounded-lg border border-border bg-background focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all">
+              <label htmlFor="student-course" className="text-sm font-medium">
+                Course
+              </label>
+              <select
+                id="student-course"
+                className="w-full px-3 py-2 rounded-lg border border-border bg-background focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                aria-required="true"
+              >
                 <option>Computer Science</option>
                 <option>Engineering</option>
                 <option>Business Administration</option>
@@ -193,8 +228,14 @@ const AddStudentModal = ({ isOpen, onClose }) => {
               </select>
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium">Year Level</label>
-              <select className="w-full px-3 py-2 rounded-lg border border-border bg-background focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all">
+              <label htmlFor="student-year" className="text-sm font-medium">
+                Year Level
+              </label>
+              <select
+                id="student-year"
+                className="w-full px-3 py-2 rounded-lg border border-border bg-background focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                aria-required="true"
+              >
                 <option>1st Year</option>
                 <option>2nd Year</option>
                 <option>3rd Year</option>
@@ -202,16 +243,23 @@ const AddStudentModal = ({ isOpen, onClose }) => {
               </select>
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium">Email Address</label>
+              <label htmlFor="student-email" className="text-sm font-medium">
+                Email Address
+              </label>
               <input
+                id="student-email"
                 type="email"
                 placeholder="student@hcub.edu"
                 className="w-full px-3 py-2 rounded-lg border border-border bg-background focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                aria-required="true"
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium">Phone Number</label>
+              <label htmlFor="student-phone" className="text-sm font-medium">
+                Phone Number
+              </label>
               <input
+                id="student-phone"
                 type="tel"
                 placeholder="+1 (555) 000-0000"
                 className="w-full px-3 py-2 rounded-lg border border-border bg-background focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
@@ -223,11 +271,11 @@ const AddStudentModal = ({ isOpen, onClose }) => {
         <div className="p-6 border-t border-border bg-muted/30 flex justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-lg border border-border hover:bg-accent transition-colors text-sm font-medium"
+            className="px-4 py-2 rounded-lg border border-border hover:bg-accent transition-colors text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
             Cancel
           </button>
-          <button className="px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors text-sm font-medium">
+          <button className="px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground">
             Add Student
           </button>
         </div>

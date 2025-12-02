@@ -11,7 +11,6 @@ import {
   Trash2,
   Edit2,
   X,
-  Clock,
 } from "lucide-react";
 import clsx from "clsx";
 
@@ -69,26 +68,29 @@ const CourseCard = ({ course, onEdit, onDelete, onMarkComplete }) => (
         <BookOpen size={24} />
       </div>
       <div className="relative">
-        <button className="p-1 hover:bg-accent rounded-md text-muted-foreground transition-colors group-hover:text-foreground">
+        <button
+          className="p-1 hover:bg-accent rounded-md text-muted-foreground transition-colors group-hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          aria-label={`Actions for ${course.name}`}
+          aria-haspopup="true"
+        >
           <MoreVertical size={18} />
         </button>
-        {/* Dropdown Mock - In a real app, this would be a proper dropdown component */}
-        <div className="absolute right-0 top-8 w-48 bg-popover border border-border rounded-lg shadow-lg py-1 hidden group-hover:block z-10">
+        <div className="absolute right-0 top-8 w-48 bg-card/95 backdrop-blur-md border border-border/50 rounded-lg shadow-xl py-1 hidden group-hover:block z-10">
           <button
             onClick={() => onEdit(course)}
-            className="w-full text-left px-4 py-2 text-sm hover:bg-accent flex items-center gap-2"
+            className="w-full text-left px-4 py-2 text-sm hover:bg-accent flex items-center gap-2 focus:outline-none focus-visible:bg-accent"
           >
-            <Edit2 size={14} /> Edit Course
+            <Edit2 className="size-14" /> Edit Course
           </button>
           <button
             onClick={() => onMarkComplete(course.id)}
-            className="w-full text-left px-4 py-2 text-sm hover:bg-accent flex items-center gap-2"
+            className="w-full text-left px-4 py-2 text-sm hover:bg-accent flex items-center gap-2 focus:outline-none focus-visible:bg-accent"
           >
             <CheckCircle size={14} /> Mark Complete
           </button>
           <button
             onClick={() => onDelete(course.id)}
-            className="w-full text-left px-4 py-2 text-sm hover:bg-accent text-destructive flex items-center gap-2"
+            className="w-full text-left px-4 py-2 text-sm hover:bg-accent text-destructive flex items-center gap-2 focus:outline-none focus-visible:bg-accent"
           >
             <Trash2 size={14} /> Delete
           </button>
@@ -147,21 +149,34 @@ const CourseCard = ({ course, onEdit, onDelete, onMarkComplete }) => (
 const CourseModal = ({ isOpen, onClose, course, onSave }) => {
   if (!isOpen) return null;
 
+  const handleEscape = (e) => {
+    if (e.key === "Escape") onClose();
+  };
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+      onClick={onClose}
+      onKeyDown={handleEscape}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="course-modal-title"
+    >
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}
-        className="bg-card w-full max-w-lg rounded-xl shadow-xl border border-border overflow-hidden"
+        className="bg-card/95 backdrop-blur-xl w-full max-w-lg rounded-xl shadow-2xl border border-border/50 overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between p-6 border-b border-border">
-          <h2 className="text-xl font-bold">
+          <h2 id="course-modal-title" className="text-xl font-bold">
             {course ? "Edit Course" : "Add New Course"}
           </h2>
           <button
             onClick={onClose}
-            className="text-muted-foreground hover:text-foreground"
+            className="text-muted-foreground hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-full p-1"
+            aria-label="Close modal"
           >
             <X size={20} />
           </button>
@@ -170,45 +185,64 @@ const CourseModal = ({ isOpen, onClose, course, onSave }) => {
         <div className="p-6 space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium">Course Code</label>
+              <label htmlFor="course-code" className="text-sm font-medium">
+                Course Code
+              </label>
               <input
+                id="course-code"
                 type="text"
                 defaultValue={course?.code}
                 placeholder="e.g. CS101"
                 className="w-full px-3 py-2 rounded-lg border border-border bg-background focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
+                aria-required="true"
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium">Schedule</label>
+              <label htmlFor="course-schedule" className="text-sm font-medium">
+                Schedule
+              </label>
               <input
+                id="course-schedule"
                 type="text"
                 defaultValue={course?.schedule}
                 placeholder="e.g. Mon 10 AM"
                 className="w-full px-3 py-2 rounded-lg border border-border bg-background focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
+                aria-required="true"
               />
             </div>
           </div>
           <div className="space-y-2">
-            <label className="text-sm font-medium">Course Name</label>
+            <label htmlFor="course-name" className="text-sm font-medium">
+              Course Name
+            </label>
             <input
+              id="course-name"
               type="text"
               defaultValue={course?.name}
               placeholder="e.g. Intro to Computer Science"
               className="w-full px-3 py-2 rounded-lg border border-border bg-background focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
+              aria-required="true"
             />
           </div>
           <div className="space-y-2">
-            <label className="text-sm font-medium">Instructor</label>
+            <label htmlFor="course-instructor" className="text-sm font-medium">
+              Instructor
+            </label>
             <input
+              id="course-instructor"
               type="text"
               defaultValue={course?.instructor}
               placeholder="e.g. Dr. Smith"
               className="w-full px-3 py-2 rounded-lg border border-border bg-background focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
+              aria-required="true"
             />
           </div>
           <div className="space-y-2">
-            <label className="text-sm font-medium">Description</label>
+            <label htmlFor="course-description" className="text-sm font-medium">
+              Description
+            </label>
             <textarea
+              id="course-description"
               placeholder="Course description..."
               className="w-full px-3 py-2 rounded-lg border border-border bg-background focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none h-24 resize-none"
             ></textarea>
@@ -218,7 +252,7 @@ const CourseModal = ({ isOpen, onClose, course, onSave }) => {
         <div className="p-6 border-t border-border bg-muted/30 flex justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-lg border border-border hover:bg-accent transition-colors text-sm font-medium"
+            className="px-4 py-2 rounded-lg border border-border hover:bg-accent transition-colors text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
             Cancel
           </button>
@@ -227,7 +261,7 @@ const CourseModal = ({ isOpen, onClose, course, onSave }) => {
               onSave();
               onClose();
             }}
-            className="px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors text-sm font-medium"
+            className="px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground"
           >
             {course ? "Save Changes" : "Create Course"}
           </button>
@@ -296,7 +330,8 @@ const Courses = () => {
             setEditingCourse(null);
             setIsModalOpen(true);
           }}
-          className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors shadow-sm font-medium"
+          className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors shadow-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          aria-label="Add new course"
         >
           <Plus size={18} />
           Add Course
@@ -313,6 +348,7 @@ const Courses = () => {
             type="text"
             placeholder="Search courses..."
             className="w-full pl-10 pr-4 py-2 rounded-lg bg-accent/50 border-transparent focus:bg-background focus:border-primary focus:ring-1 focus:ring-primary text-sm transition-all"
+            aria-label="Search courses"
           />
         </div>
       </div>
