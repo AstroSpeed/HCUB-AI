@@ -40,26 +40,46 @@ const initialCourses = [
     id: 3,
     code: "BUS305",
     name: "Business Ethics",
-    instructor: "Mrs. Davis",
-    students: 50,
+    instructor: "Dr. Williams",
+    students: 28,
     schedule: "Fri 09:00 AM",
-    status: "Completed",
-    progress: 100,
+    status: "Active",
+    progress: 85,
   },
   {
     id: 4,
     code: "ART102",
     name: "History of Art",
-    instructor: "Mr. Wilson",
-    students: 28,
-    schedule: "Mon 01:00 PM",
+    instructor: "Prof. Davis",
+    students: 60,
+    schedule: "Mon 02:00 PM",
+    status: "Inactive",
+    progress: 100,
+  },
+  {
+    id: 5,
+    code: "PHY201",
+    name: "Physics II",
+    instructor: "Dr. Brown",
+    students: 35,
+    schedule: "Wed, Fri 11:00 AM",
     status: "Active",
-    progress: 25,
+    progress: 20,
+  },
+  {
+    id: 6,
+    code: "CHEM101",
+    name: "General Chemistry",
+    instructor: "Dr. Wilson",
+    students: 50,
+    schedule: "Tue 10:00 AM",
+    status: "Active",
+    progress: 55,
   },
 ];
 
 const CourseCard = ({ course, onEdit, onDelete, onMarkComplete }) => {
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <motion.div
@@ -81,39 +101,107 @@ const CourseCard = ({ course, onEdit, onDelete, onMarkComplete }) => {
           >
             <MoreVertical size={18} />
           </button>
-          {isMenuOpen && (
-            <>
-              {/* Backdrop to close menu when clicking outside */}
-              <div
-                className="fixed inset-0 z-10"
-                onClick={() => setIsMenuOpen(false)}
-              />
-              <div className="absolute right-0 top-8 w-48 bg-card border border-border rounded-lg shadow-xl py-1 z-20">
-                <button
-                  onClick={() => {
-                    onEdit(course);
-                    setIsMenuOpen(false);
-                  }}
-                  className="w-full text-left px-4 py-2 text-sm hover:bg-accent flex items-center gap-2 focus:outline-none focus-visible:bg-accent"
+
+          <AnimatePresence>
+            {isMenuOpen && (
+              <>
+                {/* Backdrop to close menu when clicking outside */}
+                <div
+                  className="fixed inset-0 z-10"
+                  onClick={() => setIsMenuOpen(false)}
+                />
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="absolute right-0 top-8 w-48 bg-card/95 backdrop-blur-md border border-border rounded-lg shadow-xl py-1 z-20"
                 >
-                  <Edit2 size={14} /> Edit Course
-                </button>
-                <button
-                  onClick={() => {
-                    onMarkComplete(course.id);
-                    setIsMenuOpen(false);
-                  }}
-                  className="w-full text-left px-4 py-2 text-sm hover:bg-accent flex items-center gap-2 focus:outline-none focus-visible:bg-accent"
-                >
-                  <CheckCircle size={14} /> Mark Complete
-                </button>
-                <button
-                  onClick={() => {
-                    onDelete(course.id);
-                    setIsMenuOpen(false);
-                  }}
-                  className="w-full text-left px-4 py-2 text-sm hover:bg-accent text-destructive flex items-center gap-2 focus:outline-none focus-visible:bg-accent"
-      const CourseModal = ({ isOpen, onClose, course, onSave }) => {
+                  <button
+                    onClick={() => {
+                      onEdit(course);
+                      setIsMenuOpen(false);
+                    }}
+                    className="w-full text-left px-4 py-2 text-sm hover:bg-accent flex items-center gap-2 focus:outline-none focus-visible:bg-accent"
+                  >
+                    <Edit2 size={14} /> Edit Course
+                  </button>
+                  <button
+                    onClick={() => {
+                      onMarkComplete(course.id);
+                      setIsMenuOpen(false);
+                    }}
+                    className="w-full text-left px-4 py-2 text-sm hover:bg-accent flex items-center gap-2 focus:outline-none focus-visible:bg-accent"
+                  >
+                    <CheckCircle size={14} /> Mark Complete
+                  </button>
+                  <button
+                    onClick={() => {
+                      onDelete(course.id);
+                      setIsMenuOpen(false);
+                    }}
+                    className="w-full text-left px-4 py-2 text-sm hover:bg-accent text-destructive flex items-center gap-2 focus:outline-none focus-visible:bg-accent"
+                  >
+                    <Trash2 size={14} /> Delete
+                  </button>
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+
+      <div className="flex-1">
+        <div className="flex items-center justify-between mb-1">
+          <span className="text-xs font-bold text-primary bg-primary/5 px-2 py-0.5 rounded">
+            {course.code}
+          </span>
+          <span
+            className={clsx(
+              "text-xs font-medium px-2 py-0.5 rounded-full",
+              course.status === "Active"
+                ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+                : "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400"
+            )}
+          >
+            {course.status}
+          </span>
+        </div>
+        <h3 className="font-semibold text-lg leading-tight mb-2">
+          {course.name}
+        </h3>
+        <p className="text-sm text-muted-foreground mb-4">
+          {course.instructor}
+        </p>
+
+        <div className="space-y-2 text-sm text-muted-foreground">
+          <div className="flex items-center gap-2">
+            <Users size={16} />
+            <span>{course.students} Students Enrolled</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Calendar size={16} />
+            <span>{course.schedule}</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-5 pt-4 border-t border-border">
+        <div className="flex justify-between text-xs mb-1.5">
+          <span className="font-medium">Course Progress</span>
+          <span>{course.progress}%</span>
+        </div>
+        <div className="h-2 bg-secondary rounded-full overflow-hidden">
+          <div
+            className="h-full bg-primary rounded-full transition-all duration-500"
+            style={{ width: `${course.progress}%` }}
+          />
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+const CourseModal = ({ isOpen, onClose, course, onSave }) => {
   if (!isOpen) return null;
 
   const handleEscape = (e) => {
@@ -286,24 +374,8 @@ const Courses = () => {
   };
 
   const handleSave = () => {
-    // Mock save functionality
-    if (!editingCourse) {
-      // Add new
-      setCourses([
-        ...courses,
-        {
-          id: Date.now(),
-          code: "NEW101",
-          name: "New Course",
-          instructor: "Admin",
-          students: 0,
-          schedule: "TBD",
-          status: "Active",
-          progress: 0,
-        },
-      ]);
-    }
-    setEditingCourse(null);
+    // Logic to save course
+    setIsModalOpen(false);
   };
 
   return (
